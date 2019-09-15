@@ -1,6 +1,6 @@
-# homeworld
+# Card Sandbox
 
-> Card Sandbox
+> Build your very own card games.
 
 ## Build Setup
 
