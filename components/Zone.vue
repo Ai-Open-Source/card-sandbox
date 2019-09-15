@@ -6,19 +6,33 @@
             :style="rowStyle"
         )
             .columnWrapper
-                .column(v-for="(column, key) in row")
-                    .card(v-if="column.card") {{ column.card.title }}
+                .column(
+                    v-for="(column, key) in row"
+                    :style="{ width: zone.width / row.length + 'px' }"
+                )
+                    Card(
+                        v-if="column.card"
+                        :title="`A card`"
+                        :description="`This card does cool stuff.`"
+                        :img="``"
+                        :width="zone.width / row.length"
+                    )
 </template>
 
 <script>
     import Vue from 'vue'
+    import Card from './Card'
 
     export default {
+        components: {
+            Card
+        },
+
         data () {
             return {
                 rows: new Array(4).fill(
                     new Array(6).fill({
-                        
+                        card: {}
                     })    
                 ),
 
@@ -147,6 +161,8 @@
 
             .column
                 border-right: 1px solid var(--border)
+                height: 100%
+                padding: 0
 
                 &:first-child
                     border-left: 1px solid var(--border)
