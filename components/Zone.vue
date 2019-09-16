@@ -1,21 +1,24 @@
 <template lang="pug">
     section.zone(ref="zone" :style="zoneStyle")
         .row(
-            v-for="(row, key) in rows" 
-            :key="key"
+            v-for="(row, rowKey) in rows" 
+            :key="rowKey"
             :style="rowStyle"
         )
             .columnWrapper
                 .column(
-                    v-for="(column, key) in row"
+                    v-for="(column, columnKey) in row"
                     :style="{ width: zone.width / row.length + 'px' }"
+                    :key="columnKey"
                 )
                     Card(
                         v-if="column.card"
-                        :title="`A card`"
-                        :description="`This card does cool stuff.`"
-                        :img="``"
-                        :width="zone.width / row.length"
+                        :source="column.source"
+                        :flipped="column.flipped"
+                        :row="rowKey"
+                        :column="columnKey"
+                        :transition="0.2"
+                        @click="cardClicked"
                     )
 </template>
 
@@ -28,12 +31,29 @@
             Card
         },
 
+        methods: {
+            log (string) { console.log(string) },
+
+            cardClicked ({ row, column }) {
+                const { flipped } = this.rows[row][column]
+
+                Object.assign(this.rows[row][column], {flipped: !flipped})
+
+                console.log(row, column)
+                console.log(...this.rows[0].map(({flipped})=>flipped))
+            }
+        },
+
         data () {
             return {
-                rows: new Array(4).fill(
-                    new Array(6).fill({
-                        card: {}
-                    })    
+                rows: [0,1,2,3].map( (row) =>
+                    [0,1,2,3,4,5].map( (column) => ({
+                        card: true,
+                        source: "https://c402277.ssl.cf1.rackcdn.com/photos/11552/images/hero_small/rsz_namibia_will_burrard_lucas_wwf_us_1.jpg?1462219623",
+                        flipped: false,
+                        row,
+                        column
+                    }))  
                 ),
 
                 zone: {
@@ -80,10 +100,10 @@
             })
 
             window.addEventListener('wheel', ({ target, deltaY }) => {
-                if (/\btabletop\b/.test(target.className)) {
+                if (/\b(tabletop|card)\b/.test(target.className)) {
 
                     const normal = 
-                        deltaY * // delta of mouse wheel
+                        (Math.abs(deltaY) >= 80 ? deltaY / 33 : deltaY) * // delta of mouse wheel; account for browser differences in deltaY
                         -1 * // uninvert mousewheel
                         (this.settings.zoomSensitivity * (this.zone.width/1000)) // normalize zoom velocity
 
@@ -104,7 +124,7 @@
             })
 
             window.addEventListener('mousedown', ({ which, target, clientX, clientY }) => {
-                if (which === 2 && /\btabletop\b/.test(target.className)) {
+                if (which === 2 && /\b(tabletop|card)\b/.test(target.className)) {
                     panning = true
                     Object.assign(start, { clientX, clientY })
                     const { top, left } = this.zone
@@ -123,7 +143,7 @@
             })
 
             window.addEventListener('mouseup', ({ which, target }) => {
-                if (which === 2 && /\btabletop\b/.test(target.className))
+                if (which === 2)
                     panning = false
             })
         },

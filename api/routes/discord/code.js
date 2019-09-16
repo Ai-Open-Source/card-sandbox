@@ -1,12 +1,22 @@
 module.exports = async ( req, res, { discord, mongo, encrypt, token } ) => {
     const { query, fingerprint } = req
 
-	const response = await discord.code({
-		code: query.code,
-		redirect_uri: encodeURIComponent( req.protocol + '://' + req.get('host') + '/api/discord/code' )
-	})
+    console.log(query.code)
 
-	console.log(response)
+    let response;
+
+    try {
+        response = await discord.code({
+            code: query.code,
+            redirect_uri: encodeURIComponent( req.protocol + '://' + req.get('host') + '/auth' )
+        })
+    } catch {
+        return res.json({
+            error: 400,
+            success: false,
+            message: 'failed to authenticate'
+        })
+    }
 
 	const { 
 		user: { id }, 
@@ -24,7 +34,7 @@ module.exports = async ( req, res, { discord, mongo, encrypt, token } ) => {
 			last_signed_in: Date.now(),
 			id,
 			admin: false,
-			freelancer: false,
+			verified: false,
 		}
 
 		await Users.insert(currentUser)
@@ -42,9 +52,12 @@ module.exports = async ( req, res, { discord, mongo, encrypt, token } ) => {
 	})
 	
 	token.set(res, {
+		id,
 		access_token,
-		id
 	})
 
-	res.redirect('/')
+	res.json({
+        status: 200,
+        success: true
+    })
 }

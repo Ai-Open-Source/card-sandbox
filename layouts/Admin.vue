@@ -24,6 +24,10 @@
             return {
                 nav: [
                     {
+                        name: 'New Card',
+                        route: 'upload',
+                    },
+                    {
                         name: 'Cards',
                         route: 'cards',
                     },

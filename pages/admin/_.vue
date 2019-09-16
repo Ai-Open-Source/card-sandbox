@@ -1,10 +1,11 @@
 <template lang="pug">
     section
-        
 </template>
 
 <script>
     export default {
-        layout: 'Admin'
+        created () {
+            this.$router.replace('/admin')
+        }
     }
 </script>

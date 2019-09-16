@@ -6,30 +6,29 @@ module.exports = ({ encrypt, decrypt, discord, mongo, token }) => async (req, re
 	}
 
 	const { id } = token.get(req)
-	const {query: { origin }, fingerprint} = req
-
+    const {fingerprint} = req
+    
 	try {
 		const Sessions = mongo.collection('sessions')
 		const Users = mongo.collection('users')
 
-		const { ciphertext, salt } = (
-			await Sessions.find({
-				fingerprint: fingerprint.hash,
-				id
-			})
-		)[0]
+        const session = await Sessions.find({
+            fingerprint: fingerprint.hash,
+            id
+        })
+
+        if (session.length === 0 || !session[0]) return {
+            code: 404,
+            message: 'no session found',
+            success:false
+        }
+
+        const { ciphertext, salt } = session[0]
 
 		const {token: {refresh_token, access_token}, user} = await discord.refresh( {
 			refresh_token: decrypt(ciphertext, token.get(req).access_token, salt), 
-			redirect_uri: encodeURIComponent(origin)
+			redirect_uri:  encodeURIComponent( req.protocol + '://' + req.get('host') + '/refresh' )
 		})
-
-		if (user.id !== id) return {
-			status: 404,
-			message: 'user not found',
-			success: false
-		}
-
 
         await Sessions.remove({
             fingerprint: fingerprint.hash
@@ -51,7 +50,7 @@ module.exports = ({ encrypt, decrypt, discord, mongo, token }) => async (req, re
 			created_at, 
 			last_signed_in, 
 			admin, 
-			freelancer
+			verified
 		} = (await Users.find({ id }))[0]
 
 		return {
@@ -60,15 +59,15 @@ module.exports = ({ encrypt, decrypt, discord, mongo, token }) => async (req, re
 				created_at, 
 				last_signed_in, 
 				admin, 
-				freelancer 
+				verified
 			}),
 			success: true
 		}
 	} catch (error) {
 		return {
 			status: 404,
-			message: 'user not found',
+			message: 'failed to authenticate',
 			success: false
-		}
+        }
 	}
 }

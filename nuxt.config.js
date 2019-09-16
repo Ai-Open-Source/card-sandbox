@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/api.js'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -63,6 +64,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
+    },
+    watch: ['api']
   }
 }

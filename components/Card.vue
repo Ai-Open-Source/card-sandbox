@@ -1,46 +1,89 @@
 <template lang="pug">
-    section.cardWrapper.full(
-        :style="{ padding: width / 15 + 'px' }"
+    section.card.full(
+        :class="{ flipped: isFlipped, transitioning }"
+        :style="style"
     )
-        section.card.full(
-            :style="{ borderRadius: width / 60 + 'px' }"
+        img.card-image(
+            :src="source"
+            v-show="!isFlipped"
+            :ref="`image`"
+            @click="emitClick"
         )
-            .title(
-                :style="{ fontSize: width / 14 + 'px' }"
-            ) {{ title }}
 
-            img(
-                src="https://c402277.ssl.cf1.rackcdn.com/photos/11552/images/hero_small/rsz_namibia_will_burrard_lucas_wwf_us_1.jpg?1462219623"
-            )
-
-            .description(
-                :style="{ fontSize: width / 20 + 'px' }"
-            ) {{ description }}
+        .card-background(
+            v-show="isFlipped"
+            @click="emitClick"
+        )
 </template>
 
 <script>
+    import Vue from 'vue'
+
+    const alarm = seconds => new Promise(_ => setTimeout(_, seconds * 1000)) 
+
     export default {
-        props: ["title", "description", "img", "width"]
+        props: ["row", "column", "source", "flipped", "transition"],
+
+        data () {
+            return {
+                transitioning: false,
+                isFlipped: this.flipped
+            }
+        },
+
+        computed: {
+            style () { return {
+                transition: `transform ${this.transition}s`
+            }},
+        },
+
+        methods: {
+            async flip ( flipped ) {
+                Vue.set(this, 'transitioning', true)
+                await alarm(this.transition)
+                Vue.set(this, 'isFlipped', flipped)
+                Vue.set(this, 'transitioning', false)
+            },
+
+            emitClick ( event ) {
+                this.$emit('click', {
+                    row: this.row,
+                    column: this.column
+                })
+            }
+        },
+
+        watch: {
+            flipped (from, to) {
+                return this.flip( !to )
+            }
+        }
     }
 </script>
 
 <style lang="sass">
     section.card
-        padding: 0
+        padding: 8%
         width: 100%
         height: 100%
-        background-color: var(--foreground)
+        display: flex
+        align-items: center
+        justify-content: center
+        transform: scaleX(1)
 
-        .title
-            font-weight: 800
-            height: 12%
-            display: flex
-            align-items: center
-            justify-content: center
+        &.transitioning
+            transform: scaleX(0)
 
         img
             width: 100%
+            height: 100%
+            object-fit: contain
+            pointer-events: auto
 
-        .description
-            padding: 3%
+        .card-background
+            background-color: var(--foreground)
+            height: 100%
+            width: 100%
+            pointer-events: auto
+
 </style>
