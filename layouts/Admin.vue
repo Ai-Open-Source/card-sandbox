@@ -58,11 +58,17 @@
                 justify-content: center
                 pointer-events: none
                 user-select: none
+                border: 1px solid var(--border)
+                border-bottom: 1px solid transparent
 
-            div:not(:last-child)
-                border-right: 1px solid var(--border)
+                &:first-child
+                    border-left: none
+
+                &:last-child
+                    border-right: none
 
             .inactive
+                border: none
                 border-bottom: 1px solid var(--border)
                 cursor: pointer
                 pointer-events: all

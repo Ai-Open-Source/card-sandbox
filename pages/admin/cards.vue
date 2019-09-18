@@ -1,5 +1,5 @@
 <template lang="pug">
-    section
+    section.cardManager
         
 </template>
 
@@ -8,3 +8,9 @@
         layout: 'Admin'
     }
 </script>
+
+<style lang="sass">
+    section.cardManager
+        display: flex
+        
+</style>

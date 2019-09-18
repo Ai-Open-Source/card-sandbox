@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { encrypt, decrypt, pbkdf2 } = require('./crypt')
-
+const path = require('path')
 
 // Discord
 
@@ -36,6 +36,11 @@ app.use(bodyParser.json({
 app.use(require('cookie-parser')())
 
 
+// // Media
+
+// app.use('/media', express.static(path.join(__dirname, 'media')))
+
+
 // MongoDB / Router
 
 require('./mongo')().then( async mongo => {
@@ -47,6 +52,7 @@ require('./mongo')().then( async mongo => {
 		decrypt,
 		pbkdf2,
 		token,
+        uuid: require('./uuid'),
         ws: require('./ws')
     }
     

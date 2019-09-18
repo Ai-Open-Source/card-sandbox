@@ -5,7 +5,7 @@
 <script>
     export default {
         created () {
-            this.$router.replace('/admin')
+            this.$router.replace('/admin/upload')
         }
     }
 </script>

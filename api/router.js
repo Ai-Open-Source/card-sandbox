@@ -1,6 +1,6 @@
 const handler = (script, imports) => async (req, res) => {
 	try {
-		await require('./routes/' + script)( req, res, imports )
+        await require('./routes/' + script)( req, res, imports )
 	} catch (error) {
 		res.json({
 			code: '500',
@@ -22,7 +22,9 @@ module.exports = ({ app }, imports) => {
 				break
 
 			case 'post':
-				app.post(path, handler(script, imports))
+                script.middleware
+                    ? app.post('/'+path, script.middleware, handler(script.route, imports))
+                    : app.post('/'+path, handler(script, imports))
 				break
 
 			default:
