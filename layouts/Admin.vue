@@ -80,22 +80,22 @@
         & > section
             height: calc(100% - 3rem)
 
-    label[for="cardImageInput"], button, input
-        background-color: var(--foreground)
-        padding: 0.7rem 1rem
-        border: none
-        outline: none
-        color: var(--text)
-        font-size: 1rem
-        margin: 0.3rem
+        label[for="cardImageInput"], button, input
+            background-color: var(--foreground)
+            padding: 0.7rem 1rem
+            border: none
+            outline: none
+            color: var(--text)
+            font-size: 1rem
+            margin: 0.3rem
 
-        &:not(input)
-            cursor: pointer
+            &:not(input)
+                cursor: pointer
 
-        &:hover:not(input)
-            background-color: var(--text)
-            color: var(--foreground)
+            &:hover:not(input)
+                background-color: var(--text)
+                color: var(--foreground)
 
-    input[type="file"]
-        display: none
+        input[type="file"]
+            display: none
 </style>

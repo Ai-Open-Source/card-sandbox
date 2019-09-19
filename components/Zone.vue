@@ -46,16 +46,6 @@
 
         data () {
             return {
-                rows: [0,1,2,3].map( (row) =>
-                    [0,1,2,3,4,5].map( (column) => ({
-                        card: true,
-                        source: "https://c402277.ssl.cf1.rackcdn.com/photos/11552/images/hero_small/rsz_namibia_will_burrard_lucas_wwf_us_1.jpg?1462219623",
-                        flipped: false,
-                        row,
-                        column
-                    }))  
-                ),
-
                 zone: {
                     width: 0,
                     left: 0,
@@ -79,6 +69,10 @@
                 left: this.zone.left + 'px',
                 top: this.zone.top + 'px',
             }},
+
+            rows () {
+                return this.$store.state.rows
+            }
         },
 
         mounted () {
@@ -94,9 +88,36 @@
             Vue.set(this.zone, 'width', initialWidth)
             Vue.set(this.zone, 'left', (parentNode.clientWidth / 2) - (initialWidth / 2) )
 
+            this.$store.commit('set', {
+                rows: [0,1,2,3].map( row => [
+                        ...[0,1,2].map( column => ({
+                            card: true,
+                            source: "https://c402277.ssl.cf1.rackcdn.com/photos/11552/images/hero_small/rsz_namibia_will_burrard_lucas_wwf_us_1.jpg?1462219623",
+                            flipped: false,
+                            row,
+                            column
+                        })),
+
+                        ...[0,1,2].map( (column) => ({
+                            row, column, card: false
+                        }))
+                    ]
+                )
+            })
+
             this.$nextTick(() => {
                 Vue.set(this.zone, 'height',  this.$refs.zone.clientHeight)
                 Vue.set(this.zone, 'top', (parentNode.clientHeight / 2) - (this.zone.height / 2) )
+
+                const { width, height, top, left } = this.zone
+
+                this.$store.commit('set', {
+                    zone: {
+                        width, height, top,  left: left + parentNode.offsetLeft,
+                        rows: this.rows.length,
+                        columns: this.rows[0].length,
+                    }
+                })
             })
 
             window.addEventListener('wheel', ({ target, deltaY }) => {
@@ -120,6 +141,24 @@
 
                     Vue.set(this.zone, 'top', dy)
                     Vue.set(this.zone, 'left', dx)
+
+                    this.$nextTick(() => {
+                        Vue.set(
+                            this,
+                            'height',
+                            this.$refs.zone.clientHeight
+                        )
+
+                        const { width, height, top, left } = this.zone
+
+                        this.$store.commit('set', {
+                            zone: {
+                                width, height, top, left: left + parentNode.offsetLeft,
+                                rows: this.rows.length,
+                                columns: this.rows[0].length,
+                            }
+                        })
+                    })
                 }
             })
 

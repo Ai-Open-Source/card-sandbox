@@ -26,5 +26,6 @@ module.exports = {
     },
 
     'get cards': 'cards/get',
-    'post cards/edit': 'cards/edit'
+    'post cards/edit': 'cards/edit',
+    'post cards/delete': 'cards/delete'
 }

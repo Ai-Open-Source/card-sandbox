@@ -23,11 +23,8 @@
                     option(value="true") true
                     option(value="false") false
                 
-                button(@click="submit") Submit
-                button Delete 
-                //- TODO: Make delete button work
-            
-
+                button(@click="submitEdit") Submit
+                button(@click="deleteCard") Delete 
 </template>
 
 <script>
@@ -49,7 +46,19 @@
                 console.log(card)
             },
 
-            async submit ( ) {
+            async deleteCard ( ) {
+                const { success, message } = await this.api('cards/delete', {
+                    method: 'post',
+                    data: {
+                        uuid: this.card.uuid
+                    }
+                })
+
+                if (success) Vue.set(this, 'card', {})
+                else if (message) alert(message)
+            },
+
+            async submitEdit ( ) {
                 const { uuid, tags, title, archived } = this.card
 
                 const data = { uuid }
@@ -64,7 +73,7 @@
                 })
 
                 if (success) Vue.set(this, 'card', {})
-                else console.error(message)
+                else if (message) alert(message)
             },
 
             setArchived ( event ) {
@@ -124,7 +133,7 @@
             background-color: var(--background)
             border: 1px solid var(--border)
 
-    .cards 
+    .card 
         cursor: pointer
         img:hover
             filter: brightness(120%)
