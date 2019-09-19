@@ -1,5 +1,5 @@
 <template lang="pug">
-    section.full.admin
+    section.full.admin(v-if="logged_in")
         .nav
             nuxt-link( 
                 v-for="{ name, route } in nav" 
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+    import Vue from 'vue'
+
     export default {
         computed: {
             path () { 
@@ -36,8 +38,18 @@
                         route: 'accounts',
                     },
                 ],
+
+                logged_in: false
             }
         },
+
+        async mounted () {
+            const { success, user } = await this.api('discord/refresh')
+
+            if ( !success || !user.admin ) this.$router.push('/login')
+
+            Vue.set(this, 'logged_in', success)
+        }
     }
 </script>
 

@@ -2,7 +2,19 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = async (req, res, { mongo}) => {
-    console.log(req.file.filename)
+    const { success, user } = await refresh(req, res)
+
+    if (!success) return res.json({
+        code: 400,
+        success: false,
+        message: 'authentication failed' 
+    })
+
+    if (!user.admin) return res.json({
+        code: 401,
+        success: false,
+        message: 'unauthorized'
+    })
 
     const { tags, title } = req.body
 
