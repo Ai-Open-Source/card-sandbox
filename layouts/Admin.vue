@@ -1,5 +1,5 @@
 <template lang="pug">
-    section.full
+    section.full.admin
         .nav
             nuxt-link( 
                 v-for="{ name, route } in nav" 
@@ -41,8 +41,8 @@
     }
 </script>
 
-<style lang="sass" scoped>
-    section
+<style lang="sass">
+    section.admin
         display: flex
         flex-direction: column
 
@@ -79,4 +79,23 @@
 
         & > section
             height: calc(100% - 3rem)
+
+    label[for="cardImageInput"], button, input
+        background-color: var(--foreground)
+        padding: 0.7rem 1rem
+        border: none
+        outline: none
+        color: var(--text)
+        font-size: 1rem
+        margin: 0.3rem
+
+        &:not(input)
+            cursor: pointer
+
+        &:hover:not(input)
+            background-color: var(--text)
+            color: var(--foreground)
+
+    input[type="file"]
+        display: none
 </style>

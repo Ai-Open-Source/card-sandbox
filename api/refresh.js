@@ -41,17 +41,17 @@ module.exports = ({ encrypt, decrypt, discord, mongo, token }) => async (req, re
             date: Date.now()
         })
 
-		token.set(res, {
-			id,
-			access_token
-		})
-
 		const {
 			created_at, 
 			last_signed_in, 
 			admin, 
 			verified
 		} = (await Users.find({ id }))[0]
+
+		token.set(res, {
+			id,
+			access_token
+		})
 
 		return {
 			status: 200,

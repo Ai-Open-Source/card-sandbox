@@ -25,5 +25,6 @@ module.exports = {
         }).single('source')
     },
 
-    'get cards': 'cards/get'
+    'get cards': 'cards/get',
+    'post cards/edit': 'cards/edit'
 }

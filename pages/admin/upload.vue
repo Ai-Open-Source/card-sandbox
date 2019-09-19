@@ -95,24 +95,5 @@
             width: 60vmin
             height: 60vmin
             object-fit: contain
-
-        label[for="cardImageInput"], button, input
-            background-color: var(--foreground)
-            padding: 0.7rem 1rem
-            border: none
-            outline: none
-            color: var(--text)
-            font-size: 1rem
-            margin: 0.3rem
-
-            &:not(input)
-                cursor: pointer
-
-            &:hover:not(input)
-                background-color: var(--text)
-                color: var(--foreground)
-
-        input[type="file"]
-            display: none
         
 </style>
