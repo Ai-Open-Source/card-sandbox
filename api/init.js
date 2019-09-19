@@ -38,7 +38,7 @@ app.use(require('cookie-parser')())
 
 // // Media
 
-// app.use('/media', express.static(path.join(__dirname, 'media')))
+app.use('/media', express.static(path.join(__dirname, 'media')))
 
 
 // MongoDB / Router

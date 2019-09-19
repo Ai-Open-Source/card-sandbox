@@ -6,6 +6,7 @@ module.exports = {
 	'get discord/login': 'discord/login',
 	'get discord/users/:id': 'discord/users',
     'get discord/refresh': 'discord/refresh',
+
     'post cards/upload': {
         route: 'cards/upload',
 
@@ -14,7 +15,7 @@ module.exports = {
         middleware: multer({ 
             storage: multer.diskStorage({
                 destination: function (req, file, callback) {
-                    callback(null, 'media/')
+                    callback(null, 'api/media/')
                 },
 
                 filename ( req, file, callback ) {
@@ -22,5 +23,7 @@ module.exports = {
                 }
             })
         }).single('source')
-    }
+    },
+
+    'get cards': 'cards/get'
 }

@@ -17,7 +17,11 @@ module.exports = async (req, res, { mongo}) => {
     const Cards = mongo.collection('cards')
 
     Cards.insert({
-        tags, title, uuid
+        tags, 
+        title, 
+        uuid, 
+        archived: false,
+        date: Date.now()
     })
 
     return res.json({
