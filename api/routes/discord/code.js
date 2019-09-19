@@ -8,7 +8,7 @@ module.exports = async ( req, res, { discord, mongo, encrypt, token } ) => {
     try {
         response = await discord.code({
             code: query.code,
-            redirect_uri: encodeURIComponent( req.protocol + '://' + req.get('host') + '/auth' )
+            redirect_uri: req.query.origin + '/auth'
         })
     } catch {
         return res.json({

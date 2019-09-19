@@ -27,7 +27,7 @@ module.exports = ({ encrypt, decrypt, discord, mongo, token }) => async (req, re
 
 		const {token: {refresh_token, access_token}, user} = await discord.refresh( {
 			refresh_token: decrypt(ciphertext, token.get(req).access_token, salt), 
-			redirect_uri:  encodeURIComponent( req.protocol + '://' + req.get('host') + '/refresh' )
+			redirect_uri:  req.query.origin + '/refresh'
 		})
 
         await Sessions.remove({

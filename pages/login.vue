@@ -8,7 +8,7 @@
     export default {
         methods: {
             login () {
-                window.location.replace(`/api/discord/login`)
+                window.location.replace(`/api/discord/login?origin=` + location.origin)
             }
         }
     }
