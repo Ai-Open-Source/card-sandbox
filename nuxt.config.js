@@ -66,5 +66,9 @@ module.exports = {
     extend (config, ctx) {
     },
     watch: ['api']
-  }
+  },
+  
+  server: {
+    port: 3333,
+  },
 }
