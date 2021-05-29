@@ -30,7 +30,7 @@
     "saslprep": "^1.0.3",
     "sass-loader": "7.0.0",
     "uuid": "^3.3.3",
-    "ws": "^7.1.2"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
